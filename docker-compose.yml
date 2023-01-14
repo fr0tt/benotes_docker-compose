@@ -1,7 +1,7 @@
 version: "3.6"
 services:
   app:
-    container_name: app
+    container_name: benotes_app
     image: fr0tt/benotes:latest
     restart: unless-stopped
     environment:
@@ -20,7 +20,7 @@ services:
       - benotes
 
   db:
-    container_name: db
+    container_name: benotes_db
     image: mysql:5.7
     restart: unless-stopped
     environment:
