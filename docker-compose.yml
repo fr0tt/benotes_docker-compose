@@ -13,34 +13,55 @@ services:
       #- ./data/storage/app/public/thumbnails:/var/www/storage/app/public/thumbnails
       #- ./data/storage/backup:/var/www/storage/backup
       #- ./data/storage/logs:/var/www/storage/logs
-      # or instead:   
+      # or instead one named volume to rule them all:   
       - benotes_storage:/var/www/storage
+      # this is optional (either way):
       #- ./data/nginx/logs/:/var/lib/nginx/logs/
     networks:
       - benotes
 
   db:
     container_name: benotes_db
-    image: mysql:5.7
+    image: postgres:15.2-alpine
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DATABASE: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 3306
+      - ${DB_PORT}
     volumes:
-      - benotes_mysql:/var/lib/mysql
+      - benotes_postgres:/var/lib/postgres/data
     networks:
       - benotes
+  #
+  # If you wish to use MySQL instead remove the lines above, uncomment the following
+  # and change APP_PORT in your .env file to 3306
+  #
+  # db:
+  #   container_name: benotes_db
+  #   image: mysql:5.7
+  #   restart: unless-stopped
+  #   environment:
+  #     MYSQL_DATABASE: ${DB_DATABASE}
+  #     MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+  #     MYSQL_USER: ${DB_USERNAME}
+  #     MYSQL_PASSWORD: ${DB_PASSWORD}
+  #   ports:
+  #     - ${DB_PORT}
+  #   volumes:
+  #     - benotes_mysql:/var/lib/mysql
+  #   networks:
+  #     - benotes
 
 networks:
   benotes:
     driver: bridge
 
 volumes:
-  benotes_mysql:
+  benotes_postgres:
     driver: "local"
+  # benotes_mysql:
+  #   driver: "local"
   benotes_storage:
     driver: "local"
