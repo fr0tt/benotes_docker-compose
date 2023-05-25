@@ -31,12 +31,12 @@ services:
     ports:
       - ${DB_PORT}
     volumes:
-      - benotes_postgres:/var/lib/postgres/data
+      - benotes_postgres:/var/lib/postgresql/data
     networks:
       - benotes
   #
   # If you wish to use MySQL instead remove the lines above, uncomment the following
-  # and change APP_PORT in your .env file to 3306
+  # and change DB_PORT in your .env file to 3306
   #
   # db:
   #   container_name: benotes_db
